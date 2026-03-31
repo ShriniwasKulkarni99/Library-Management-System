@@ -7,6 +7,7 @@ import { Table } from '../../components/common/Table'
 import { StatusBadge } from '../../components/common/Table'
 import Button from '../../components/common/Button'
 import FormInput from '../../components/common/FormInput'
+import { resolveProfileImageUrl } from '../../utils/media'
 import styles from './ProfilePage.module.css'
 
 export default function UserDetailPage() {
@@ -77,7 +78,7 @@ export default function UserDetailPage() {
           <div className={styles.avatarSection}>
             <div className={styles.avatarWrap}>
               {user.profile_image
-                ? <img src={`/uploads/${user.profile_image}`} alt="Profile" className={styles.avatarImg} />
+                ? <img src={resolveProfileImageUrl(user.profile_image)} alt="Profile" className={styles.avatarImg} />
                 : <div className={styles.avatarFallback}>{initials}</div>
               }
             </div>

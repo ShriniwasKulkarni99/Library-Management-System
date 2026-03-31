@@ -1,4 +1,4 @@
-const db = require('../config/db');
+const { pool: db } = require('../config/db');
 
 /**
  * GET /api/issues

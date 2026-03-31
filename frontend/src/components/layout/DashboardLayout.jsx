@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+import { resolveProfileImageUrl } from '../../utils/media'
 import styles from './DashboardLayout.module.css'
 
 const ADMIN_NAV = [
@@ -43,7 +44,7 @@ export default function DashboardLayout({ children }) {
 
   const roleLabel = { admin: 'Administrator', student: 'Student', staff: 'Staff Member' }[user?.role]
   const initials = user ? `${user.first_name[0]}${user.last_name[0]}` : '?'
-  const avatarSrc = user?.profile_image ? `/uploads/${user.profile_image}` : null
+  const avatarSrc = resolveProfileImageUrl(user?.profile_image)
 
   return (
     <div className={`${styles.layout} ${collapsed ? styles.collapsed : ''}`}>

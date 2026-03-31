@@ -1,5 +1,4 @@
 const mysql = require('mysql2/promise');
-require('dotenv').config();
 
 const pool = mysql.createPool({
   host:     process.env.DB_HOST     || 'localhost',
@@ -13,9 +12,18 @@ const pool = mysql.createPool({
   timezone:           '+00:00',
 });
 
-// Quick connectivity test
-pool.getConnection()
-  .then(conn => { conn.release(); console.log('✅  MySQL connected'); })
-  .catch(err  => { console.error('❌  MySQL connection error:', err.message); process.exit(1); });
+let hasLoggedConnection = false;
 
-module.exports = pool;
+const pingDb = async () => {
+  const conn = await pool.getConnection();
+  conn.release();
+
+  if (!hasLoggedConnection) {
+    console.log('MySQL connected');
+    hasLoggedConnection = true;
+  }
+
+  return true;
+};
+
+module.exports = { pool, pingDb };

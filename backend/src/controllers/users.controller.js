@@ -1,7 +1,6 @@
-const db          = require('../config/db');
+const { pool: db } = require('../config/db');
 const authService = require('../services/auth.service');
-const fs          = require('fs');
-const path        = require('path');
+const { uploadProfileImage, deleteProfileImage } = require('../services/storage.service');
 
 /**
  * GET /api/users  (admin)
@@ -70,12 +69,11 @@ const updateUser = async (req, res, next) => {
     // Handle profile image upload
     let profileImagePath;
     if (req.file) {
-      profileImagePath = req.file.filename;
+      profileImagePath = await uploadProfileImage(req.file);
       // Delete old image
       const [rows] = await db.query('SELECT profile_image FROM users WHERE id = ?', [id]);
       if (rows[0]?.profile_image) {
-        const oldPath = path.join(process.env.UPLOAD_PATH || 'uploads/profiles', rows[0].profile_image);
-        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+        await deleteProfileImage(rows[0].profile_image);
       }
     }
 
@@ -174,8 +172,7 @@ const deleteUser = async (req, res, next) => {
     await conn.commit();
 
     if (user.profile_image) {
-      const imagePath = path.join(process.env.UPLOAD_PATH || 'uploads/profiles', user.profile_image);
-      if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
+      await deleteProfileImage(user.profile_image);
     }
 
     res.json({ success: true, message: 'User deleted successfully.' });

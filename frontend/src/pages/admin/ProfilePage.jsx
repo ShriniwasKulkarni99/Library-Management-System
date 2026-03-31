@@ -5,6 +5,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import { PageHeader } from '../../components/common/PageHeader'
 import FormInput from '../../components/common/FormInput'
 import Button from '../../components/common/Button'
+import { resolveProfileImageUrl } from '../../utils/media'
 import styles from './ProfilePage.module.css'
 
 export default function ProfilePage() {
@@ -92,7 +93,7 @@ export default function ProfilePage() {
   }
 
   const avatarSrc = preview
-    || (user?.profile_image ? `/uploads/${user.profile_image}` : null)
+    || resolveProfileImageUrl(user?.profile_image)
 
   const initials = user ? `${user.first_name[0]}${user.last_name[0]}` : '?'
   const roleLabel = { admin: 'Administrator', student: 'Student', staff: 'Staff Member' }[user?.role]

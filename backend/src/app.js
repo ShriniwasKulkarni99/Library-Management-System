@@ -1,9 +1,11 @@
-require('dotenv').config();
 const express      = require('express');
 const cors         = require('cors');
 const helmet       = require('helmet');
 const morgan       = require('morgan');
 const path         = require('path');
+const { validateEnv } = require('./config/env');
+const { pingDb } = require('./config/db');
+const { hasCloudinaryConfig } = require('./services/storage.service');
 
 const errorHandler = require('./middlewares/error.middleware');
 
@@ -14,8 +16,7 @@ const booksRoutes     = require('./routes/books.routes');
 const issuesRoutes    = require('./routes/issues.routes');
 const dashboardRoutes = require('./routes/dashboard.routes');
 
-// Bootstrap DB connection
-require('./config/db');
+validateEnv();
 
 const app = express();
 
@@ -35,8 +36,10 @@ if (process.env.NODE_ENV !== 'test') {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ── Static files (uploaded images) ────────────────────────
-app.use('/uploads', express.static(path.resolve(process.env.UPLOAD_PATH || 'uploads/profiles')));
+// ── Static files (local uploaded images only) ─────────────
+if (!hasCloudinaryConfig()) {
+  app.use('/uploads', express.static(path.resolve(process.env.UPLOAD_PATH || 'uploads/profiles')));
+}
 
 // ── API routes ────────────────────────────────────────────
 app.use('/api/auth',      authRoutes);
@@ -46,19 +49,36 @@ app.use('/api/issues',    issuesRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
 // ── Health check ──────────────────────────────────────────
-app.get('/api/health', (_req, res) => res.json({ status: 'ok', timestamp: new Date() }));
+app.get('/api/health', (_req, res) => {
+  res.json({
+    status: 'ok',
+    environment: process.env.NODE_ENV || 'development',
+    timestamp: new Date().toISOString(),
+  });
+});
+
+app.get('/api/ready', async (_req, res) => {
+  try {
+    await pingDb();
+    res.json({
+      status: 'ready',
+      database: 'connected',
+      timestamp: new Date().toISOString(),
+    });
+  } catch (err) {
+    res.status(503).json({
+      status: 'not_ready',
+      database: 'disconnected',
+      message: err.message,
+      timestamp: new Date().toISOString(),
+    });
+  }
+});
 
 // ── 404 ───────────────────────────────────────────────────
 app.use((_req, res) => res.status(404).json({ success: false, message: 'Route not found.' }));
 
 // ── Global error handler ──────────────────────────────────
 app.use(errorHandler);
-
-// ── Start server ──────────────────────────────────────────
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀  Library API running on http://localhost:${PORT}`);
-  console.log(`    Environment: ${process.env.NODE_ENV || 'development'}`);
-});
 
 module.exports = app;

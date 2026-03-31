@@ -1,4 +1,4 @@
-const db = require('../config/db');
+const { pool: db } = require('../config/db');
 
 const DEPARTMENT_CODES = {
   'Computer Science': 'CS',
