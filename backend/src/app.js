@@ -2,6 +2,7 @@ const express      = require('express');
 const cors         = require('cors');
 const helmet       = require('helmet');
 const morgan       = require('morgan');
+const fs           = require('fs');
 const path         = require('path');
 const { validateEnv } = require('./config/env');
 const { pingDb } = require('./config/db');
@@ -37,8 +38,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ── Static files (local uploaded images only) ─────────────
-if (!hasCloudinaryConfig()) {
-  app.use('/uploads', express.static(path.resolve(process.env.UPLOAD_PATH || 'uploads/profiles')));
+const uploadPath = path.resolve(process.env.UPLOAD_PATH || 'uploads/profiles');
+if (!hasCloudinaryConfig() && fs.existsSync(uploadPath)) {
+  app.use('/uploads', express.static(uploadPath));
 }
 
 // ── API routes ────────────────────────────────────────────

@@ -5,7 +5,13 @@ const { hasCloudinaryConfig } = require('../services/storage.service');
 
 const uploadDir = path.resolve(process.env.UPLOAD_PATH || 'uploads/profiles');
 if (!hasCloudinaryConfig() && !fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+  try {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  } catch (err) {
+    if (!['EROFS', 'EACCES', 'EPERM'].includes(err.code)) {
+      throw err;
+    }
+  }
 }
 
 const storage = hasCloudinaryConfig()
