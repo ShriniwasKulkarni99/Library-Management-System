@@ -1,0 +1,99 @@
+.wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-ink-08);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.table thead tr {
+  background: var(--color-ink-08);
+  border-bottom: 1px solid var(--color-ink-20);
+}
+
+.table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--color-ink-80);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 11px 14px;
+  color: var(--color-ink-80);
+  border-bottom: 1px solid var(--color-ink-08);
+  vertical-align: middle;
+}
+
+.table tbody tr:last-child td { border-bottom: none; }
+
+.table tbody tr:hover { background: var(--color-ink-08); }
+
+.skelCell {
+  height: 16px;
+  width: 80%;
+  min-width: 60px;
+}
+
+.empty {
+  text-align: center;
+  padding: var(--space-16) var(--space-8);
+  color: var(--color-ink-50);
+}
+.empty span { font-size: 2.5rem; display: block; margin-bottom: var(--space-3); }
+.empty p { font-size: 0.9rem; }
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+  flex-wrap: wrap;
+}
+.paginationInfo { font-size: 0.8125rem; color: var(--color-ink-50); }
+.paginationControls { display: flex; align-items: center; gap: 4px; }
+
+.pageBtn {
+  min-width: 32px; height: 32px;
+  border: 1px solid var(--color-ink-20);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-ink-80);
+  font-size: 0.8125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+  padding: 0 8px;
+}
+.pageBtn:hover:not(:disabled) { background: var(--color-ink-08); border-color: var(--color-ink-50); }
+.pageBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+.pageBtnActive { background: var(--color-accent) !important; color: #fff !important; border-color: var(--color-accent) !important; }
+.ellipsis { color: var(--color-ink-50); padding: 0 4px; font-size: 0.875rem; }
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.badge_green  { background: var(--color-green-lt);  color: var(--color-green); }
+.badge_blue   { background: var(--color-blue-lt);   color: var(--color-blue); }
+.badge_red    { background: var(--color-accent-lt); color: var(--color-accent); }
+.badge_gold   { background: var(--color-gold-lt);   color: var(--color-gold); }
+.badge_default{ background: var(--color-ink-08);    color: var(--color-ink-80); }

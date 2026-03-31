@@ -1,0 +1,134 @@
+/* ================================================================
+   LibraryMS — Design System
+   Aesthetic: Editorial / Refined institutional with warm accents
+   Fonts: DM Serif Display (headings) + DM Sans (body)
+   ================================================================ */
+
+:root {
+  /* Palette */
+  --color-ink:       #1a1612;
+  --color-ink-80:    #3d3630;
+  --color-ink-50:    #8d8279;
+  --color-ink-20:    #d4cfc9;
+  --color-ink-08:    #f0ede8;
+  --color-bg:        #faf8f5;
+  --color-surface:   #ffffff;
+  --color-accent:    #c0392b;
+  --color-accent-dk: #96201a;
+  --color-accent-lt: #fdf0ee;
+  --color-gold:      #c8922a;
+  --color-gold-lt:   #fdf6e8;
+  --color-green:     #27755a;
+  --color-green-lt:  #ebf6f2;
+  --color-blue:      #1e5fa6;
+  --color-blue-lt:   #eaf1fb;
+
+  /* Shadows */
+  --shadow-sm:   0 1px 3px rgba(26,22,18,.08), 0 1px 2px rgba(26,22,18,.06);
+  --shadow-md:   0 4px 12px rgba(26,22,18,.10), 0 2px 4px rgba(26,22,18,.06);
+  --shadow-lg:   0 12px 32px rgba(26,22,18,.12), 0 4px 8px rgba(26,22,18,.06);
+  --shadow-xl:   0 24px 56px rgba(26,22,18,.15);
+
+  /* Radii */
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+
+  /* Spacing scale */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10:40px;
+  --space-12:48px;
+  --space-16:64px;
+
+  /* Typography */
+  --font-serif: 'DM Serif Display', Georgia, serif;
+  --font-sans:  'DM Sans', system-ui, sans-serif;
+
+  /* Transitions */
+  --transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Sidebar */
+  --sidebar-w: 256px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-ink);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  line-height: 1.25;
+  font-weight: 400;
+}
+
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.375rem; }
+h4 { font-size: 1.125rem; }
+
+a { color: var(--color-accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button { cursor: pointer; font-family: var(--font-sans); }
+
+img { max-width: 100%; display: block; }
+
+input, textarea, select {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--color-ink-08); }
+::-webkit-scrollbar-thumb { background: var(--color-ink-20); border-radius: 99px; }
+
+/* Utility */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border-width: 0;
+}
+
+/* Page transitions */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-enter {
+  animation: fadeUp 0.3s ease forwards;
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--color-ink-08) 25%, var(--color-ink-20) 50%, var(--color-ink-08) 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
