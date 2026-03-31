@@ -4,17 +4,13 @@ const fs     = require('fs');
 const { hasCloudinaryConfig } = require('../services/storage.service');
 
 const uploadDir = path.resolve(process.env.UPLOAD_PATH || 'uploads/profiles');
-if (!hasCloudinaryConfig() && !fs.existsSync(uploadDir)) {
-  try {
-    fs.mkdirSync(uploadDir, { recursive: true });
-  } catch (err) {
-    if (!['EROFS', 'EACCES', 'EPERM'].includes(err.code)) {
-      throw err;
-    }
-  }
+const useLocalDiskStorage = !hasCloudinaryConfig() && process.env.VERCEL !== '1';
+
+if (useLocalDiskStorage && !fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-const storage = hasCloudinaryConfig()
+const storage = (hasCloudinaryConfig() || !useLocalDiskStorage)
   ? multer.memoryStorage()
   : multer.diskStorage({
       destination: (_req, _file, cb) => cb(null, uploadDir),
